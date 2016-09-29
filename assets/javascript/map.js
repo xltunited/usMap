@@ -1,10 +1,24 @@
 $(document).ready(function(){
 
+	var config = {
+	    apiKey: "AIzaSyBmkCEad6AxdRJVEy8MtrzETphHcnsNb24",
+	    authDomain: "map-data-1e0ef.firebaseapp.com",
+	    databaseURL: "https://map-data-1e0ef.firebaseio.com",
+	    storageBucket: "map-data-1e0ef.appspot.com",
+	    messagingSenderId: "729944294128"
+	};
+
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
 	function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
 		return "<h4>"+n+"</h4><table>"+
-			"<tr><td>Low</td><td>"+(d.low)+"</td></tr>"+
-			"<tr><td>Average</td><td>"+(d.avg)+"</td></tr>"+
-			"<tr><td>High</td><td>"+(d.high)+"</td></tr>"+
+			"<tr><td>Javascript</td><td>"+(d.javascript)+"</td></tr>"+
+			"<tr><td>Node</td><td>"+(d.node)+"</td></tr>"+
+			"<tr><td>Python</td><td>"+(d.python)+"</td></tr>"+
+			"<tr><td>Ruby</td><td>"+(d.ruby)+"</td></tr>"+
+			"<tr><td>PHP</td><td>"+(d.php)+"</td></tr>"+
 			"</table>";
 	}
 	
@@ -13,19 +27,69 @@ $(document).ready(function(){
 	"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
 	"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
 	"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-	"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
-		.forEach(function(d){ 
-			var low=Math.round(100*Math.random()), 
-				mid=Math.round(100*Math.random()), 
-				high=Math.round(100*Math.random());
-			sampleData[d]={low:d3.min([low,mid,high]), high:d3.max([low,mid,high]), 
-					avg:Math.round((low+mid+high)/3), color:d3.interpolate("#ffffff", "#000000")(low/100)}; 
+	"WI", "MO", "AR", "OK", "KS", "LA", "VA"]
+		.forEach(function(d){
+
+			console.log(d);
+
+			var javascript;
+
+			var node;
+
+			var python;
+
+			var ruby;
+
+			var php;
+
+			database.ref(d).once("value").then(function(snapshot){
+
+				console.log(snapshot.val().javascript);
+
+				javascript = snapshot.val().javascript;
+
+				node = snapshot.val().node;
+
+				python = snapshot.val().python;
+
+				ruby = snapshot.val().ruby;
+
+				php = snapshot.val().php;
+
+				sampleData[d]={
+
+					javascript: javascript, 
+
+					node:node,
+
+					python:python,
+
+					ruby: ruby,
+
+					php: php,
+
+					color:d3.interpolate("#ffffff", "#000000")(100/100)
+
+				};
+
+				if(d == 'VA'){
+
+					mapImg.draw("#statesvg", sampleData, tooltipHtml);
+		
+					d3.select(self.frameElement).style("height", "600px");
+
+				}
+
+			});
+
+			
+			 
+
 		});
 	
-	/* draw states on id #statesvg */	
-	mapImg.draw("#statesvg", sampleData, tooltipHtml);
+	/* draw states on id #statesvg */
+
 	
-	d3.select(self.frameElement).style("height", "600px");
 
 	$('#radioStacked0').on('click', function(){
 
@@ -54,7 +118,7 @@ $(document).ready(function(){
 		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
 		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
 		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-		"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+		"WI", "MO", "AR", "OK", "KS", "LA", "VA"]
 			.forEach(function(d){ 
 				var low=Math.round(100*Math.random()), 
 					mid=Math.round(100*Math.random()), 
@@ -91,7 +155,7 @@ $(document).ready(function(){
 		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
 		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
 		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-		"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+		"WI", "MO", "AR", "OK", "KS", "LA", "VA"]
 			.forEach(function(d){ 
 				var low=Math.round(100*Math.random()), 
 					mid=Math.round(100*Math.random()), 
@@ -128,7 +192,7 @@ $(document).ready(function(){
 		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
 		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
 		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-		"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+		"WI", "MO", "AR", "OK", "KS", "LA", "VA"]
 			.forEach(function(d){ 
 				var low=Math.round(100*Math.random()), 
 					mid=Math.round(100*Math.random()), 
@@ -155,10 +219,10 @@ $(document).ready(function(){
 
 		function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
 			return "<h4>"+n+"</h4><table>"+
-			"<tr><td>Low</td><td>"+(d.low)+"</td></tr>"+
-			"<tr><td>Average</td><td>"+(d.avg)+"</td></tr>"+
-			"<tr><td>High</td><td>"+(d.high)+"</td></tr>"+
-			"</table>";
+				"<tr><td>Low</td><td>"+(d.low)+"</td></tr>"+
+				"<tr><td>Average</td><td>"+(d.avg)+"</td></tr>"+
+				"<tr><td>High</td><td>"+(d.high)+"</td></tr>"+
+				"</table>";
 		}
 		
 		var sampleData ={};	/* Sample random data. */	
@@ -166,8 +230,10 @@ $(document).ready(function(){
 		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
 		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
 		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-		"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+		"WI", "MO", "AR", "OK", "KS", "LA", "VA"]
 			.forEach(function(d){ 
+
+
 				var low=Math.round(100*Math.random()), 
 					mid=Math.round(100*Math.random()), 
 					high=Math.round(100*Math.random());
@@ -204,7 +270,7 @@ $(document).ready(function(){
 		"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
 		"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
 		"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-		"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+		"WI", "MO", "AR", "OK", "KS", "LA", "VA"]
 			.forEach(function(d){ 
 				var low=Math.round(100*Math.random()), 
 					mid=Math.round(100*Math.random()), 

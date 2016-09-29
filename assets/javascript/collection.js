@@ -20,7 +20,7 @@ $(document).ready(function(){
             "ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH", 
             "MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT", 
             "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
-            "WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+            "WI", "MO", "AR", "OK", "KS", "LA", "VA"]
 
         //Populate the default map with javascript===============================================
 
@@ -164,8 +164,43 @@ $(document).ready(function(){
 
         }
 
+        for(var i=0; i < states.length; i++){
+
+            
+            database.ref(states[i]).once("value").then(function(snapshot){
+
+                var totalStateJob = snapshot.val().javascript + snapshot.val().node + snapshot.val().python + snapshot.val().ruby + snapshot.val().php;
+
+                database.ref(states[i]).update({
+
+                    totalJobs: totalStateJob
+
+                })
+
+            });
+            
+        }
+
+        var totalCountryJobs = 0;
+
+        for(var i=0; i < states.length; i++){
+
+            database.ref(states[i]).once("value").then(function(snapshot){
+
+                totalCountryJobs = totalCountryJobs + snapshot.val().totalJobs
+
+            });
+
+            database.ref().update({
+
+                totalCountry: totalCountryJobs
+
+            })
+            
+        }
+
        
-        
+
     });
 
 });

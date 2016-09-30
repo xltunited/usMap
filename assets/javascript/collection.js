@@ -164,43 +164,6 @@ $(document).ready(function(){
 
         }
 
-        for(var i=0; i < states.length; i++){
-
-            
-            database.ref(states[i]).once("value").then(function(snapshot){
-
-                var totalStateJob = snapshot.val().javascript + snapshot.val().node + snapshot.val().python + snapshot.val().ruby + snapshot.val().php;
-
-                database.ref(states[i]).update({
-
-                    totalJobs: totalStateJob
-
-                })
-
-            });
-            
-        }
-
-        var totalCountryJobs = 0;
-
-        for(var i=0; i < states.length; i++){
-
-            database.ref(states[i]).once("value").then(function(snapshot){
-
-                totalCountryJobs = totalCountryJobs + snapshot.val().totalJobs
-
-            });
-
-            database.ref().update({
-
-                totalCountry: totalCountryJobs
-
-            })
-            
-        }
-
-       
-
     });
 
 });

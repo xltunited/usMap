@@ -12,13 +12,17 @@ $(document).ready(function(){
 
     var database = firebase.database();
 
+    var jobsInCountry = 122873;
+
 	function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
+
 		return "<h4>"+n+"</h4><table>"+
 			"<tr><td>Javascript</td><td>"+(d.javascript)+"</td></tr>"+
 			"<tr><td>Node</td><td>"+(d.node)+"</td></tr>"+
 			"<tr><td>Python</td><td>"+(d.python)+"</td></tr>"+
 			"<tr><td>Ruby</td><td>"+(d.ruby)+"</td></tr>"+
 			"<tr><td>PHP</td><td>"+(d.php)+"</td></tr>"+
+			"<iframe src='https://map-data-1e0ef.firebaseapp.com/?s="+ (d.id)+"' width='275' height='325'></iframe>" 
 			"</table>";
 	}
 	
@@ -29,8 +33,6 @@ $(document).ready(function(){
 	"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
 	"WI", "MO", "AR", "OK", "KS", "LA", "VA"]
 		.forEach(function(d){
-
-			console.log(d);
 
 			var javascript;
 
@@ -44,7 +46,9 @@ $(document).ready(function(){
 
 			database.ref(d).once("value").then(function(snapshot){
 
-				console.log(snapshot.val().javascript);
+				console.log(snapshot.val().totalJobs);
+
+				console.log(jobsInCountry);
 
 				javascript = snapshot.val().javascript;
 
@@ -55,6 +59,8 @@ $(document).ready(function(){
 				ruby = snapshot.val().ruby;
 
 				php = snapshot.val().php;
+
+				var colorNum = (snapshot.val().totalJobs*10/jobsInCountry).toFixed(2);
 
 				sampleData[d]={
 
@@ -68,7 +74,9 @@ $(document).ready(function(){
 
 					php: php,
 
-					color:d3.interpolate("#ffffff", "#000000")(100/100)
+					id: d,
+
+					color:d3.interpolate("#ffffff", "#000000")(colorNum)
 
 				};
 
@@ -81,9 +89,6 @@ $(document).ready(function(){
 				}
 
 			});
-
-			
-			 
 
 		});
 	

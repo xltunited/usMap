@@ -141,7 +141,7 @@ $(document).ready(function(){
 
 						javascriptPercentage: (javascriptStatePercent*100).toFixed(2),
 
-						color:d3.interpolate("#ffffff", "#ffff00")((javascriptStatePercent.toFixed(2))*2.5)
+						color:d3.interpolate("#ffffff", "#ffff00")((javascriptStatePercent.toFixed(2))*2)
 
 					};
 

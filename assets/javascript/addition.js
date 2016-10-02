@@ -24,17 +24,11 @@ $(document).ready(function(){
             "CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN", 
             "WI", "MO", "AR", "OK", "KS", "LA", "VA"];  
 
-function updateTotal(state) {
+        function updateTotal(state) {
 
             database.ref(state).once("value").then(function(snapshot){
 
-                alert();
-
                 var totalStateJob = snapshot.val().javascript + snapshot.val().node + snapshot.val().python + snapshot.val().ruby + snapshot.val().php;
-
-                console.log(totalStateJob+ 'totalStateJob');
-
-                console.log(state);
 
                 database.ref(state).update({
 
@@ -44,45 +38,15 @@ function updateTotal(state) {
 
             });
 
-}
+        }
 
         for(var i=0 ; i < states.length; i++){
-
-            console.log(states[i]);
 
             var state = states[i];
 
             updateTotal(state);
             
         }
-
-        
-
-        function totalCountry(state){
-
-            database.ref(state).once("value").then(function(snapshot){
-
-                totalCountryJobs = totalCountryJobs + snapshot.val().totalJobs;
-
-            });
-
-            database.ref().update({
-
-                totalCountry: totalCountryJobs
-
-            })
-
-        }
-
-        for(var i=0; i < states.length; i++){
-
-            var state = states[i];
-
-            totalCountry(state);
-            
-        }
-
-       
 
     });
 

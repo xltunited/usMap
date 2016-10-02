@@ -44,7 +44,7 @@ $(document).ready(function(){
 
                 database.ref(state).update({
 
-                    javascript: jobAmount,
+                    javascript: jobAmount
 
                 })
 
